@@ -1,10 +1,12 @@
 🇺🇦 Опис (UA)
 
-🏛 Офіційний Державний Реєстр: Шаблон Нової Держави — це веб-інструмент для створення детальної документації вигаданої або реальної держави у форматі офіційного реєстру.
+🏛 **Офіційний Державний Реєстр: Шаблон Нової Держави**
 
-⚙ Поточна версія: v0.6
+Це веб-інструмент для створення детальної документації вигаданої або реальної держави у форматі офіційного реєстру.
 
-Проєкт поєднує зручний інтерфейс із стилізованим дизайном під державний документ і дозволяє заповнювати ключові аспекти країни:
+⚙ **Поточна версія:** v0.6
+
+Проєкт поєднує зручний інтерфейс зі стилізованим дизайном під державний документ і дозволяє заповнювати ключові аспекти країни:
 
 - політичну систему та керівництво
 - населення та економіку
@@ -12,25 +14,30 @@
 - географію, історію та зовнішню політику
 - партії, суспільство та технології
 
-Підтримується два режими:
+Підтримується два режими роботи:
+- **Простий** — для швидкого створення базового опису
+- **Експерт** — для детального опрацювання всіх аспектів
 
-- Простий — для швидкого створення базового опису
-- Експерт — для детального опрацювання всіх аспектів
-
-Додаткові можливості:
-
+### Додаткові можливості
 - перемикання мови (UA / EN)
-- експорт у ".txt" та ".docx" (docx працює некоректно)
-- друк документа (в розробці)
-- імпорт даних (працює, але не повністю виправлений)
+- експорт у `.txt` та `.docx`
+- друк документа
+- імпорт даних
+
+### Важливі зауваження щодо функціоналу
+- Експорт у **.docx** працює **некоректно** (не рекомендується використовувати наразі)
+- Друк документа — **в розробці**
+- Імпорт даних — **працює**, але **не повністю виправлений**
 
 ---
 
 🇬🇧 Description (EN)
 
-🏛 Official State Register: New Country Template is a web-based tool for creating structured documentation of a fictional or real state in the format of an official register.
+🏛 **Official State Register: New Country Template**
 
-⚙ Current version: v0.6
+This is a web-based tool for creating structured documentation of a fictional or real state in the format of an official register.
+
+⚙ **Current version:** v0.6
 
 The project combines a clean interface with a document-style design, allowing users to define key aspects of a country:
 
@@ -40,14 +47,17 @@ The project combines a clean interface with a document-style design, allowing us
 - geography, history, and foreign policy
 - parties, society, and technology
 
-Available modes:
+Two operating modes are available:
+- **Simple Mode** — for quick basic setup
+- **Expert Mode** — for detailed configuration of all aspects
 
-- Simple Mode — for quick basic setup
-- Expert Mode — for detailed configuration
+### Additional Features
+- Language switch (UA / EN)
+- Export to `.txt` and `.docx`
+- Document printing
+- Data import
 
-Additional features:
-
-- language switch (UA / EN)
-- export to ".txt" and ".docx" (docx export is not fully working)
-- document printing (in development)
-- data import (working, but not fully fixed)
+### Important notes on functionality
+- **.docx** export is **not working correctly** (not recommended to use at the moment)
+- Document printing — **in development**
+- Data import — **works**, but **not fully fixed**
