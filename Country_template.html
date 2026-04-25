@@ -90,8 +90,60 @@ body.mode-simple .expert-only{display:none!important}
 .pop-track{height:9px;background:var(--parchment-dark);border-radius:5px;overflow:hidden;border:1px solid var(--border)}
 .pop-fill{height:100%;border-radius:5px;transition:width .25s;background:linear-gradient(to right,var(--gold),var(--gold-light))}
 .pop-fill.unoff{background:linear-gradient(to right,var(--red),#c0392b)}
-.pop-slider{width:100%;margin-top:3px;accent-color:var(--gold);cursor:pointer}
-.pop-slider.unoff{accent-color:var(--red)}
+.pop-slider {
+    width:100%;
+    margin-top:3px;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    background: transparent;
+    cursor: pointer;
+}
+.pop-slider::-webkit-slider-runnable-track {
+    background: var(--parchment-dark);
+    height: 8px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+}
+.pop-slider::-moz-range-track {
+    background: var(--parchment-dark);
+    height: 8px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+}
+.pop-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--gold);
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    margin-top: -5px;
+}
+.pop-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--gold);
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    cursor: pointer;
+}
+.pop-slider.unoff::-webkit-slider-thumb,
+.pop-slider.unoff {
+    accent-color: var(--red);
+}
+.pop-slider.unoff::-webkit-slider-thumb {
+    background: var(--red);
+    border-color: var(--ink);
+}
+.pop-slider {
+    accent-color: var(--gold);
+}
+.pop-slider.unoff {
+    accent-color: var(--red);
+}
 .ban-note{font-size:12px;font-style:italic;color:var(--red);opacity:.85;padding:4px 8px;background:rgba(139,26,26,.06);border-left:2px solid var(--red);border-radius:0 2px 2px 0;margin-top:4px;}
 .add-party-btn{font-family:'EB Garamond',serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;padding:8px 20px;border:1px dashed var(--border);background:transparent;color:var(--gold);cursor:pointer;width:100%;margin-top:10px;transition:all .2s;border-radius:2px;}
 .add-party-btn:hover{background:var(--gold);color:var(--parchment);border-style:solid}
