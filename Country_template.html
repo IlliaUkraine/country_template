@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Шаблон Нової Країни / Country Template</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+:root{--ink:#1a1209;--parchment:#f5eed8;--parchment-dark:#e8ddbf;--gold:#b8860b;--gold-light:#d4a843;--red:#8b1a1a;--accent:#2c4a6e;--border:#c8b068;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#2a2015;font-family:'EB Garamond',Georgia,serif;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:20px 16px;background-image:radial-gradient(ellipse at 20% 20%,rgba(184,134,11,.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,.08) 0%,transparent 60%);}
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(30,20,8,.93);backdrop-filter:blur(8px);padding:8px 20px;border-bottom:1px solid rgba(200,176,104,.3);flex-wrap:wrap;}
+.top-bar-group{display:flex;align-items:center;gap:6px}
+.top-bar-sep{width:1px;height:28px;background:rgba(200,176,104,.3);margin:0 6px}
+.tbar-lbl{font-family:'EB Garamond',serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(200,176,104,.6)}
+.toggle-btn{font-family:'EB Garamond',serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border:1px solid rgba(200,176,104,.5);background:transparent;color:rgba(200,176,104,.7);cursor:pointer;transition:all .2s;border-radius:2px;white-space:nowrap;}
+.toggle-btn.active,.toggle-btn:hover{background:var(--gold);color:#1a1209;border-color:var(--gold);}
+.toggle-btn.lang-btn{padding:6px 12px;font-size:11px}
+#quick-nav{background:transparent; border:1px solid rgba(200,176,104,.5); color:rgba(200,176,104,.9); font-family:'EB Garamond',serif; font-size:12px; text-transform:uppercase; letter-spacing:1px; padding:6px 10px; border-radius:2px; outline:none; cursor:pointer;}
+#quick-nav option{background:#1a1209; color:var(--gold);}
+.document{background:var(--parchment);max-width:820px;width:100%;margin-top:64px;position:relative;box-shadow:0 0 0 1px var(--border),0 0 0 6px var(--parchment-dark),0 0 0 7px var(--border),0 4px 60px rgba(0,0,0,.7),inset 0 0 80px rgba(0,0,0,.04);animation:appear .7s ease-out;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");}
+@keyframes appear{from{opacity:0;transform:translateY(16px) scale(.99)}to{opacity:1;transform:none}}
+.document::before,.document::after{content:'✦';position:absolute;font-size:18px;color:var(--gold);line-height:1}
+.document::before{top:16px;left:20px}.document::after{bottom:16px;right:20px}
+.corner-br{position:absolute;top:16px;right:20px;color:var(--gold);font-size:18px}
+.corner-bl{position:absolute;bottom:16px;left:20px;color:var(--gold);font-size:18px}
+.doc-header{text-align:center;padding:40px 60px 28px;border-bottom:1px solid var(--border);position:relative}
+.doc-label{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;font-style:italic}
+.doc-title{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:var(--ink);line-height:1.1;margin-bottom:8px}
+.doc-subtitle{font-size:15px;color:var(--accent);font-style:italic;letter-spacing:1px}
+.mode-badge{display:inline-block;font-size:10px;letter-spacing:3px;text-transform:uppercase;padding:3px 10px;border:1px solid var(--border);color:var(--gold);margin-top:10px;font-style:normal;border-radius:2px;}
+.mode-badge.expert{border-color:var(--red);color:var(--red)}
+.divider{display:flex;align-items:center;gap:12px;margin:16px 60px 0}
+.divider-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border))}
+.divider-line:last-child{background:linear-gradient(to left,transparent,var(--border))}
+.divider-gem{color:var(--gold);font-size:14px}
+.emblem-zone{padding:24px 60px 18px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center;}
+.emblem{width:90px;height:108px;border:2px solid var(--border);border-radius:4px 4px 50% 50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;background:linear-gradient(160deg,var(--parchment-dark),var(--parchment));cursor:pointer;transition:border-color .3s;}
+.emblem:hover{border-color:var(--gold)}.emblem-icon{font-size:34px}
+.emblem-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-top:6px}
+.flag-zone{text-align:left}.flag-zone-right{text-align:right}
+.mini-field{margin-bottom:10px}
+.mini-field-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:2px}
+.mini-input{background:transparent;border:none;border-bottom:1px dashed var(--border);font-family:'EB Garamond',serif;font-size:15px;font-style:italic;color:var(--ink);outline:none;width:100%;}
+.mini-select{background:transparent;border:none;border-bottom:1px dashed var(--border);font-family:'EB Garamond',serif;font-size:14px;font-style:italic;color:var(--ink);outline:none;}
+.doc-body{padding:28px 60px 40px}
+.section{margin-bottom:28px;page-break-inside:avoid;scroll-margin-top:70px;}
+body.mode-simple .expert-only{display:none!important}
+.section-header{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.section-num{font-family:'Playfair Display',serif;font-size:11px;color:var(--gold);letter-spacing:2px;min-width:24px}
+.section-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--red);letter-spacing:.5px;flex:1}
+.section-line{height:1px;background:linear-gradient(to right,var(--border),transparent);flex:1}
+.fields-grid{display:grid;gap:10px}
+.fields-grid.two-col{grid-template-columns:1fr 1fr}
+.fields-grid.three-col{grid-template-columns:1fr 1fr 1fr}
+.field{display:flex;flex-direction:column;gap:4px}
+.field.full{grid-column:1/-1}
+.field-label{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);font-family:'EB Garamond',serif}
+.field-input{background:transparent;border:none;border-bottom:1px solid var(--border);padding:5px 0;font-family:'EB Garamond',serif;font-size:15px;color:var(--ink);width:100%;font-style:italic;transition:border-color .2s;outline:none;}
+.field-input:focus{border-bottom-color:var(--gold);background:rgba(184,134,11,.03)}
+.field-input.tall{resize:vertical;min-height:66px;border:1px solid var(--border);padding:7px 10px;border-radius:2px;line-height:1.6}
+.field-input.tall:focus{border-color:var(--gold);background:rgba(184,134,11,.03)}
+.field-hint{font-size:11px;color:#999;font-style:italic;display:block}
+.checkbox-grid{display:flex;flex-wrap:wrap;gap:6px 18px;padding:6px 0}
+.checkbox-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink);cursor:pointer}
+.checkbox-item input[type="checkbox"], .checkbox-item input[type="radio"]{accent-color:var(--gold);width:14px;height:14px}
+.rating-field{display:flex;gap:6px;align-items:center;padding:4px 0}
+.star{font-size:18px;color:var(--border);cursor:pointer;transition:color .15s}
+.star.active{color:var(--gold)}.star:hover{color:var(--gold-light)}
+.section-sep{text-align:center;color:var(--border);letter-spacing:8px;font-size:12px;margin:6px 0 24px}
+/* PARTIES */
+.parties-list{display:flex;flex-direction:column;gap:12px;margin-top:4px}
+.party-card{border:1px solid var(--border);border-radius:3px;background:rgba(200,176,104,.05);overflow:hidden;transition:border-color .2s,opacity .2s,transform .2s;}
+.party-card:hover{border-color:var(--gold-light)}
+.party-card.banned{border-color:var(--red);background:rgba(139,26,26,.04)}
+.party-card.banned .party-header{background:rgba(139,26,26,.08)}
+.party-header{display:grid;grid-template-columns:1fr auto auto auto;gap:8px;align-items:center;padding:9px 13px;background:rgba(200,176,104,.08);border-bottom:1px solid var(--border);}
+.party-name-input{background:transparent;border:none;border-bottom:1px dashed var(--border);font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--ink);outline:none;width:100%;}
+.party-name-input::placeholder{font-weight:400;font-family:'EB Garamond',serif;font-style:italic}
+.party-banned-wrap{display:flex;align-items:center;gap:5px;white-space:nowrap}
+.ban-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--red);cursor:pointer}
+.party-type-sel{background:transparent;border:none;border-bottom:1px dashed var(--border);font-family:'EB Garamond',serif;font-size:12px;font-style:italic;color:var(--ink);outline:none;max-width:150px;}
+.party-del-btn{background:transparent;border:1px solid rgba(139,26,26,.3);color:var(--red);font-size:13px;cursor:pointer;padding:3px 8px;border-radius:2px;font-family:'EB Garamond',serif;transition:all .2s;}
+.party-del-btn:hover{background:var(--red);color:var(--parchment);border-color:var(--red)}
+.party-body{padding:11px 13px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pop-wrap{grid-column:1/-1}
+.pop-label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.pop-key{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.pop-val{font-size:13px;color:var(--ink);font-weight:bold;min-width:36px;text-align:right}
+.pop-track{height:9px;background:var(--parchment-dark);border-radius:5px;overflow:hidden;border:1px solid var(--border)}
+.pop-fill{height:100%;border-radius:5px;transition:width .25s;background:linear-gradient(to right,var(--gold),var(--gold-light))}
+.pop-fill.unoff{background:linear-gradient(to right,var(--red),#c0392b)}
+.pop-slider{width:100%;margin-top:3px;accent-color:var(--gold);cursor:pointer}
+.pop-slider.unoff{accent-color:var(--red)}
+.ban-note{font-size:12px;font-style:italic;color:var(--red);opacity:.85;padding:4px 8px;background:rgba(139,26,26,.06);border-left:2px solid var(--red);border-radius:0 2px 2px 0;margin-top:4px;}
+.add-party-btn{font-family:'EB Garamond',serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;padding:8px 20px;border:1px dashed var(--border);background:transparent;color:var(--gold);cursor:pointer;width:100%;margin-top:10px;transition:all .2s;border-radius:2px;}
+.add-party-btn:hover{background:var(--gold);color:var(--parchment);border-style:solid}
+.parties-summary{margin-top:10px;padding:8px 12px;background:rgba(200,176,104,.08);border:1px solid var(--border);border-radius:2px;font-size:12px;color:var(--accent);font-style:italic;display:none}
+.doc-footer{border-top:1px solid var(--border);padding:20px 60px 28px;display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:center;}
+.signature-block{text-align:center}
+.sig-line{border-bottom:1px solid var(--ink);height:30px;margin-bottom:6px}
+.sig-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.doc-seal{width:72px;height:72px;border-radius:50%;border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto;color:var(--border)}
+.actions{text-align:center;padding:0 0 12px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.btn{font-family:'EB Garamond',serif;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;padding:9px 22px;border:1px solid var(--border);background:transparent;color:var(--gold);cursor:pointer;transition:all .2s;border-radius:1px;white-space:nowrap;}
+.btn:hover{background:var(--gold);color:var(--parchment);border-color:var(--gold)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.export-status{text-align:center;padding:0 0 18px;font-family:'EB Garamond',serif;font-size:13px;color:var(--gold);letter-spacing:2px;min-height:22px}
+.val-error{color:var(--red);font-size:12px;font-style:italic;margin-top:4px;display:none;}
+
+/* Responsive Optimizations */
+@media(max-width:1024px){
+  .fields-grid.three-col{grid-template-columns:1fr 1fr;}
+  .document{margin-top:80px;}
+}
+@media(max-width:768px){
+  .fields-grid.two-col,.fields-grid.three-col{grid-template-columns:1fr;}
+  .doc-header,.doc-body,.doc-footer{padding-left:30px;padding-right:30px;}
+  .party-header{grid-template-columns:1fr auto;gap:12px;}
+  .party-body{grid-template-columns:1fr;}
+  .party-type-sel{max-width:100%;}
+}
+@media(max-width:480px){
+  .doc-header,.doc-body,.doc-footer{padding-left:16px;padding-right:16px;}
+  .emblem-zone{grid-template-columns:1fr;padding:20px 16px;}
+  .flag-zone,.flag-zone-right{text-align:center;}
+  .mini-field{text-align:center!important;}
+  .mini-input,.mini-select{text-align:center!important;}
+  .doc-title{font-size:26px;}
+  .top-bar{padding:6px;gap:6px;}
+  .toggle-btn{padding:5px 10px;font-size:10px;}
+  #quick-nav{max-width:130px; font-size:10px;}
+  .divider{margin-left:10px;margin-right:10px;}
+}
+@media print{
+  body{background:white;padding:0}.document{box-shadow:none;margin-top:0}
+  .top-bar,.actions,.export-status{display:none}
+  .field-input{border-bottom:1px solid #ccc}
+}
+</style>
+</head>
+<body class="mode-simple">
+
+<div class="top-bar">
+  <div class="top-bar-group">
+    <span class="tbar-lbl" id="tbl-mode">Режим:</span>
+    <button class="toggle-btn active" id="btn-simple" onclick="setMode('simple')">Простий</button>
+    <button class="toggle-btn" id="btn-expert" onclick="setMode('expert')">Експерт</button>
+  </div>
+  <div class="top-bar-sep"></div>
+  <select id="quick-nav" onchange="if(this.value){document.getElementById(this.value).scrollIntoView({behavior:'smooth', block:'start'}); this.selectedIndex=0;}">
+    </select>
+  <div class="top-bar-sep"></div>
+  <div class="top-bar-group">
+    <button class="toggle-btn lang-btn active" id="btn-uk" onclick="setLang('uk')">🇺🇦 UA</button>
+    <button class="toggle-btn lang-btn" id="btn-en" onclick="setLang('en')">🇬🇧 EN</button>
+  </div>
+</div>
+
+<div class="document">
+  <span class="corner-br">✦</span><span class="corner-bl">✦</span>
+
+  <div class="doc-header">
+    <div class="doc-label" id="hdr-label">Офіційний Державний Реєстр</div>
+    <div class="doc-title" id="hdr-title">Шаблон Нової Держави</div>
+    <div class="doc-subtitle" id="hdr-sub">Повна конституційно-державна документація</div>
+    <div style="margin-top:10px"><span class="mode-badge" id="mode-badge">Простий режим</span></div>
+    <div class="divider"><div class="divider-line"></div><div class="divider-gem">❧</div><div class="divider-line"></div></div>
+  </div>
+
+  <div class="emblem-zone">
+    <div class="flag-zone">
+      <div class="mini-field"><span class="mini-field-label" id="lbl-cname">Назва країни</span><input class="mini-input" type="text" id="inp-cname" placeholder="Офіційна назва..."></div>
+      <div class="mini-field"><span class="mini-field-label" id="lbl-uname">Неофіційна назва</span><input class="mini-input" type="text" placeholder="Народна назва..."></div>
+      <div class="mini-field expert-only"><span class="mini-field-label" id="lbl-motto">Девіз держави</span><input class="mini-input" type="text" placeholder="«...»"></div>
+    </div>
+    <div class="emblem"><div class="emblem-icon">🛡️</div><div class="emblem-label" id="lbl-emblem">Герб</div></div>
+    <div class="flag-zone-right">
+      <div class="mini-field" style="text-align:right"><span class="mini-field-label" id="lbl-indep">Дата незалежності</span><input type="date" class="mini-input" style="text-align:right"></div>
+      <div class="mini-field" style="text-align:right"><span class="mini-field-label" id="lbl-gov">Форма правління</span><select class="mini-select" id="sel-gov"></select></div>
+      <div class="mini-field" style="text-align:right"><span class="mini-field-label" id="lbl-capital">Столиця</span><input type="text" class="mini-input" style="text-align:right" id="inp-capital" placeholder="Місто..."></div>
+    </div>
+  </div>
+
+  <div class="doc-body">
+
+    <div class="section" id="section-1">
+      <div class="section-header"><span class="section-num">I.</span><span class="section-title" id="sec-lead">Керівництво Держави</span><div class="section-line"></div></div>
+      <div class="fields-grid two-col">
+        <div class="field"><label class="field-label" id="lbl-pres">Президент / Голова держави</label><input class="field-input" type="text" placeholder="Прізвище Ім'я..."></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-pm">Прем'єр-міністр</label><input class="field-input" type="text" placeholder="Прізвище Ім'я..."></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-mdef">Міністр оборони</label><input class="field-input" type="text" placeholder="..."></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-mfar">Міністр закордонних справ</label><input class="field-input" type="text" placeholder="..."></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-term">Термін президентства</label><input class="field-input" type="text" id="inp-term" placeholder="напр. 5 років..."></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-eltype">Спосіб обрання</label><select class="field-input" id="sel-eltype"></select></div>
+        <div class="field full expert-only"><label class="field-label" id="lbl-govnote">Коментар щодо влади</label><textarea class="field-input tall" id="ta-govnote" placeholder="Опис структури влади..."></textarea></div>
+      </div>
+    </div>
+    <div class="section-sep">· · ·</div>
+
+    <div class="section" id="section-2">
+      <div class="section-header"><span class="section-num">II.</span><span class="section-title" id="sec-pop">Населення та Демографія</span><div class="section-line"></div></div>
+      <div class="fields-grid three-col">
+        <div class="field"><label class="field-label" id="lbl-poptot">Загальна чисельність</label><input class="field-input" type="text" id="inp-pop" placeholder="напр. 12 500 000"></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-popden">Густота населення</label><input class="field-input" type="text" placeholder="осіб/км²"></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-urban">Урбанізація</label><input class="field-input" type="text" placeholder="% міського..."></div>
+        <div class="field"><label class="field-label" id="lbl-lang">Державна мова</label><input class="field-input" type="text" placeholder="мова/мови..."></div>
+        <div class="field"><label class="field-label" id="lbl-rel">Офіційна релігія</label><input class="field-input" type="text" id="ph-rel" placeholder="або «Світська держава»"></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-lit">Рівень грамотності</label><input class="field-input" type="text" placeholder="напр. 94%"></div>
+        <div class="field full expert-only"><label class="field-label" id="lbl-eth">Основні етноси та меншини</label><input class="field-input" type="text" placeholder="напр. 65% — основний народ..."></div>
+      </div>
+    </div>
+    <div class="section-sep">· · ·</div>
+
+    <div class="section" id="section-3">
+      <div class="section-header"><span class="section-num">III.</span><span class="section-title" id="sec-eco">Економіка та Фінанси</span><div class="section-line"></div></div>
+      <div class="fields-grid two-col">
+        <div class="field"><label class="field-label" id="lbl-ecotype">Тип економіки</label><select class="field-input" id="sel-ecotype"></select></div>
+        <div class="field"><label class="field-label" id="lbl-curr">Національна валюта</label><input class="field-input" type="text" placeholder="назва та символ..."></div>
+        <div class="field"><label class="field-label" id="lbl-gdp">ВВП (загальний)</label><input class="field-input" type="text" placeholder="напр. $45 млрд"></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-gdppc">ВВП на душу населення</label><input class="field-input" type="text" placeholder="напр. $3 600"></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-unempl">Рівень безробіття</label><input class="field-input" type="text" placeholder="напр. 8%"></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-infl">Рівень інфляції</label><input class="field-input" type="text" placeholder="напр. 4.2%"></div>
+        <div class="field full"><label class="field-label" id="lbl-ind">Головні галузі</label><input class="field-input" type="text" placeholder="напр. сталь, нафта, туризм..."></div>
+        <div class="field full expert-only"><label class="field-label" id="lbl-trade">Головні торгові партнери</label><input class="field-input" type="text" placeholder="країни-партнери..."></div>
+        <div class="field full expert-only"><label class="field-label" id="lbl-res">Природні ресурси</label><input class="field-input" type="text" placeholder="напр. нафта, газ, родючі землі..."></div>
+        <div class="field full expert-only"><label class="field-label" id="lbl-econote">Економічні особливості та виклики</label><textarea class="field-input tall" placeholder="Борги, санкції, реформи..."></textarea></div>
+      </div>
+    </div>
+    <div class="section-sep">· · ·</div>
+
+    <div class="section" id="section-4">
+      <div class="section-header"><span class="section-num">IV.</span><span class="section-title" id="sec-mil">Збройні Сили та Безпека</span><div class="section-line"></div></div>
+      <div class="fields-grid three-col">
+        <div class="field"><label class="field-label" id="lbl-army">Чисельність армії</label><input class="field-input" type="text" id="inp-army" placeholder="осіб..."></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-res2">Резервісти</label><input class="field-input" type="text" id="inp-res2" placeholder="осіб..."></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-defbud">Оборонний бюджет</label><input class="field-input" type="text" placeholder="напр. $2.1 млрд"></div>
+      </div>
+      <div class="field full">
+        <span class="val-error" id="err-army"></span>
+      </div>
+      <div class="fields-grid two-col" style="margin-top:10px">
+        <div class="field"><label class="field-label" id="lbl-training">Рівень підготовки</label><select class="field-input" id="sel-training"></select></div>
+        <div class="field full"><label class="field-label" id="lbl-armycomp">Склад збройних сил</label><div class="checkbox-grid" id="chk-armycomp"></div></div>
+
+        <div class="field"><label class="field-label" id="lbl-branch">Рід військ</label><div class="checkbox-grid" id="chk-branches"></div></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-nuc">Ядерний статус</label><div class="checkbox-grid" id="chk-nuclear"></div></div>
+        
+        <div class="field expert-only">
+          <label class="field-label" id="lbl-milstr">Боєздатність (1–5)</label>
+          <span class="field-hint" id="hint-milstr">1 = нуль, 5 = наддержава</span>
+          <div class="rating-field" id="military-rating"><span class="star" onclick="setRating('military-rating',1)">★</span><span class="star" onclick="setRating('military-rating',2)">★</span><span class="star" onclick="setRating('military-rating',3)">★</span><span class="star" onclick="setRating('military-rating',4)">★</span><span class="star" onclick="setRating('military-rating',5)">★</span></div>
+        </div>
+        <div class="field expert-only">
+          <label class="field-label" id="lbl-milcmd">Якість командування (1–5)</label>
+          <span class="field-hint" id="hint-milcmd">Ефективність військового штабу</span>
+          <div class="rating-field" id="military-cmd-rating"><span class="star" onclick="setRating('military-cmd-rating',1)">★</span><span class="star" onclick="setRating('military-cmd-rating',2)">★</span><span class="star" onclick="setRating('military-cmd-rating',3)">★</span><span class="star" onclick="setRating('military-cmd-rating',4)">★</span><span class="star" onclick="setRating('military-cmd-rating',5)">★</span></div>
+        </div>
+        <div class="field full expert-only"><label class="field-label" id="lbl-mildoc">Воєнна доктрина та конфлікти</label><textarea class="field-input tall" placeholder="Доктрина, союзники, вороги, конфлікти..."></textarea></div>
+      </div>
+    </div>
+    <div class="section-sep">· · ·</div>
+
+    <div class="section expert-only" id="section-5">
+      <div class="section-header">
+        <span class="section-num">V.</span><span class="section-title" id="sec-intel">Спецслужби та Розвідка</span>
+        <div class="section-line"></div>
+        <label class="checkbox-item" style="font-size:11px; margin-left:10px;"><input type="checkbox" id="chk-nointel" onchange="toggleIntel()"><span id="lbl-nointel">Немає</span></label>
+      </div>
+      <div class="fields-grid two-col" id="intel-grid" style="transition: opacity 0.3s;">
+        <div class="field"><label class="field-label" id="lbl-intelname">Назва головної спецслужби</label><input class="field-input" type="text" placeholder="..."></div>
+        <div class="field"><label class="field-label" id="lbl-inteltype">Тип</label><input class="field-input" type="text" placeholder="напр. зовнішня, контррозвідка..."></div>
+        <div class="field"><label class="field-label" id="lbl-inteldir">Директор / Керівник</label><input class="field-input" type="text" placeholder="..."></div>
+        <div class="field"><label class="field-label" id="lbl-intelbud">Бюджет спецслужб</label><input class="field-input" type="text" placeholder="..."></div>
+        <div class="field full"><label class="field-label" id="lbl-intelnotes">Повноваження та операції</label><textarea class="field-input tall" placeholder="Вплив усередині країни та за кордоном..."></textarea></div>
+      </div>
+    </div>
+    <div class="section-sep expert-only">· · ·</div>
+
+    <div class="section" id="section-6">
+      <div class="section-header"><span class="section-num">VI.</span><span class="section-title" id="sec-geo">Географія та Території</span><div class="section-line"></div></div>
+      <div class="fields-grid three-col">
+        <div class="field"><label class="field-label" id="lbl-area">Загальна площа</label><input class="field-input" type="text" placeholder="км²"></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-coast">Берегова лінія</label><input class="field-input" type="text" placeholder="км або «немає»"></div>
+        <div class="field"><label class="field-label" id="lbl-clim">Клімат</label><input class="field-input" type="text" placeholder="напр. континентальний..."></div>
+        <div class="field full"><label class="field-label" id="lbl-neigh">Сусідні держави</label><input class="field-input" type="text" placeholder="перелік країн..."></div>
+        <div class="field full expert-only"><label class="field-label" id="lbl-reg">Регіони / Провінції</label><input class="field-input" type="text" placeholder="перелік адміністративних одиниць..."></div>
+        <div class="field full expert-only"><label class="field-label" id="lbl-disp">Спірні або окуповані території</label><textarea class="field-input tall" placeholder="Назви районів, хто контролює..."></textarea></div>
+      </div>
+    </div>
+    <div class="section-sep">· · ·</div>
+
+    <div class="section" id="section-7">
+      <div class="section-header"><span class="section-num">VII.</span><span class="section-title" id="sec-hist">Історія Створення</span><div class="section-line"></div></div>
+      <div class="fields-grid two-col">
+        <div class="field"><label class="field-label" id="lbl-indepfull">Дата незалежності</label><input class="field-input" type="date"></div>
+        <div class="field"><label class="field-label" id="lbl-indepfrom">Від кого отримано незалежність</label><input class="field-input" type="text" placeholder="колонія, метрополія..."></div>
+        <div class="field"><label class="field-label" id="lbl-indepmet">Спосіб здобуття незалежності</label><select class="field-input" id="sel-indepmet"></select></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-wardur">Тривалість громадянської/визвольної війни</label><input class="field-input" type="text" id="inp-wardur" placeholder="напр. 1991–1995 (4 роки)"></div>
+        <div class="field full"><label class="field-label" id="lbl-histbg">Передумови виникнення держави</label><textarea class="field-input tall" placeholder="Що передувало, який конфлікт, ідеологія..."></textarea></div>
+        <div class="field full expert-only"><label class="field-label" id="lbl-tline">Хронологія ключових подій</label><textarea class="field-input tall" style="min-height:88px" placeholder="1980 — початок руху&#10;1991 — незалежність"></textarea></div>
+        <div class="field full expert-only"><label class="field-label" id="lbl-found">Засновники держави</label><input class="field-input" type="text" placeholder="Імена ключових лідерів, ідеологів..."></div>
+      </div>
+    </div>
+    <div class="section-sep">· · ·</div>
+
+    <div class="section" id="section-8">
+      <div class="section-header"><span class="section-num">VIII.</span><span class="section-title" id="sec-for">Зовнішня Політика</span><div class="section-line"></div></div>
+      <div class="fields-grid two-col">
+        <div class="field expert-only"><label class="field-label" id="lbl-orgs">Членство в організаціях</label><div class="checkbox-grid" id="chk-orgs"></div></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-recog">Міжнародне визнання</label><div class="checkbox-grid" id="chk-recog"></div></div>
+        <div class="field"><label class="field-label" id="lbl-allies">Країни-союзники</label><input class="field-input" type="text" placeholder="перелік..."></div>
+        <div class="field"><label class="field-label" id="lbl-enem">Країни-вороги / суперники</label><input class="field-input" type="text" placeholder="перелік..."></div>
+        <div class="field full expert-only"><label class="field-label" id="lbl-forcourse">Зовнішньополітичний курс</label><textarea class="field-input tall" placeholder="Прозахідна, нейтральна, ісламська тощо..."></textarea></div>
+      </div>
+    </div>
+    <div class="section-sep">· · ·</div>
+
+    <div class="section" id="section-9">
+      <div class="section-header"><span class="section-num">IX.</span><span class="section-title" id="sec-parties">Партії та Фракції</span><div class="section-line"></div></div>
+      <p class="field-hint" id="hint-parties" style="margin-bottom:12px">Офіційна популярність — публічна підтримка. Неофіційна — підпільна, заборонена чи повстанська активність (видима лише в режимі Експерт).</p>
+      <div class="parties-list" id="parties-list"></div>
+      <button class="add-party-btn" id="btn-addparty" onclick="addParty()">+ Додати партію / фракцію</button>
+      <div class="parties-summary" id="parties-summary"></div>
+    </div>
+    <div class="section-sep">· · ·</div>
+
+    <div class="section expert-only" id="section-10">
+      <div class="section-header"><span class="section-num">X.</span><span class="section-title" id="sec-soc">Суспільство та Культура</span><div class="section-line"></div></div>
+      <div class="fields-grid three-col">
+        <div class="field"><label class="field-label" id="lbl-press">Індекс свободи преси</label><div class="rating-field" id="press-rating"><span class="star" onclick="setRating('press-rating',1)">★</span><span class="star" onclick="setRating('press-rating',2)">★</span><span class="star" onclick="setRating('press-rating',3)">★</span><span class="star" onclick="setRating('press-rating',4)">★</span><span class="star" onclick="setRating('press-rating',5)">★</span></div></div>
+        <div class="field"><label class="field-label" id="lbl-corr">Рівень корупції</label><div class="rating-field" id="corruption-rating"><span class="star" onclick="setRating('corruption-rating',1)">★</span><span class="star" onclick="setRating('corruption-rating',2)">★</span><span class="star" onclick="setRating('corruption-rating',3)">★</span><span class="star" onclick="setRating('corruption-rating',4)">★</span><span class="star" onclick="setRating('corruption-rating',5)">★</span></div><span class="field-hint" id="hint-corr">1 = чиста, 5 = надкорумпована</span></div>
+        <div class="field"><label class="field-label" id="lbl-rights">Права людини</label><div class="rating-field" id="rights-rating"><span class="star" onclick="setRating('rights-rating',1)">★</span><span class="star" onclick="setRating('rights-rating',2)">★</span><span class="star" onclick="setRating('rights-rating',3)">★</span><span class="star" onclick="setRating('rights-rating',4)">★</span><span class="star" onclick="setRating('rights-rating',5)">★</span></div><span class="field-hint" id="hint-rights">1 = порушення, 5 = взірець</span></div>
+        <div class="field"><label class="field-label" id="lbl-life">Тривалість життя</label><input class="field-input" type="text" id="inp-life" placeholder="напр. 72 роки"></div>
+        <div class="field"><label class="field-label" id="lbl-health">Охорона здоров'я</label><select class="field-input" id="sel-health"></select></div>
+        <div class="field"><label class="field-label" id="lbl-edu">Освіта</label><select class="field-input" id="sel-edu"></select></div>
+        <div class="field"><label class="field-label" id="lbl-ecology">Екологія та Довкілля</label><input class="field-input" type="text" placeholder="Стан екології..."></div>
+        <div class="field full"><label class="field-label" id="lbl-cult">Культурні особливості та традиції</label><textarea class="field-input tall" placeholder="Свята, кухня, архітектура, менталітет..."></textarea></div>
+        <div class="field full"><label class="field-label" id="lbl-infra">Інфраструктура</label><textarea class="field-input tall" placeholder="Дороги, порти, аеропорти, інтернет..."></textarea></div>
+      </div>
+    </div>
+    <div class="section-sep expert-only">· · ·</div>
+
+    <div class="section" id="section-11">
+      <div class="section-header"><span class="section-num">XI.</span><span class="section-title" id="sec-tech">Технології Держави</span><div class="section-line"></div></div>
+      <div class="fields-grid two-col">
+        <div class="field"><label class="field-label" id="lbl-techera">Епоха технологій</label><select class="field-input" id="sel-techera"></select></div>
+        <div class="field full"><label class="field-label" id="lbl-techdesc">Опис технологічного розвитку</label><textarea class="field-input tall" placeholder="Доступні технології, розвиток суспільства..."></textarea></div>
+        <div class="field full expert-only"><label class="field-label" id="lbl-techmil">Військові технології (детально)</label><textarea class="field-input tall" placeholder="Оснащення армії, передові розробки, таємні зразки зброї..."></textarea></div>
+        <div class="field full expert-only"><label class="field-label" id="lbl-techcivil">Космічна / Цифрова програма</label><textarea class="field-input tall" placeholder="ШІ, супутники, інтернет-мережі, ракетобудування..."></textarea></div>
+      </div>
+    </div>
+    <div class="section-sep">· · ·</div>
+
+    <div class="section" id="section-12">
+      <div class="section-header"><span class="section-num">XII.</span><span class="section-title" id="sec-misc">Додаткові Відомості</span><div class="section-line"></div></div>
+      <div class="fields-grid">
+        <div class="field expert-only"><label class="field-label" id="lbl-anthem">Національний гімн (назва)</label><input class="field-input" type="text" placeholder="назва гімну..."></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-sym">Національні символи</label><input class="field-input" type="text" placeholder="напр. орел, дуб, синій і жовтий..."></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-famous">Відомі особистості</label><input class="field-input" type="text" placeholder="вчені, полководці, митці..."></div>
+        <div class="field"><label class="field-label" id="lbl-facts">Цікаві факти / Рекорди</label><textarea class="field-input tall" placeholder="Що робить цю країну унікальною?..."></textarea></div>
+        <div class="field"><label class="field-label" id="lbl-chal">Внутрішні проблеми та виклики</label><textarea class="field-input tall" placeholder="Сепаратизм, бідність, корупція..."></textarea></div>
+        <div class="field expert-only"><label class="field-label" id="lbl-prosp">Перспективи та плани розвитку</label><textarea class="field-input tall" placeholder="Стратегічні цілі на 10–20 років..."></textarea></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="doc-footer">
+    <div class="signature-block"><div class="sig-line"></div><div class="sig-label" id="sig-auth">Підпис укладача</div></div>
+    <div class="doc-seal">🌐</div>
+    <div class="signature-block"><div class="sig-line"></div><div class="sig-label" id="sig-date">Дата складання</div></div>
+  </div>
+
+  <div class="actions">
+    <input type="file" id="file-import" accept=".txt,.docx" style="display:none" onchange="handleImport(event)">
+    <button class="btn" onclick="document.getElementById('file-import').click()" id="btn-import">📂 Завантажити</button>
+    <button class="btn" onclick="window.print()" id="btn-print">🖨 Друк</button>
+    <button class="btn" onclick="exportTXT()" id="btn-txt">📄 Текст .txt</button>
+    <button class="btn" id="btn-docx" onclick="exportDOCX()">📝 Експорт .docx</button>
+    <button class="btn" onclick="clearAll()" id="btn-clear">↺ Очистити</button>
+  </div>
+  <div class="export-status" id="export-status"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script>
+/* ═══ TRANSLATIONS ═══ */
+const T={
+uk:{
+  modeLabel:'Режим:',modeSimple:'Простий',modeExpert:'Експерт',
+  badgeSimple:'Простий режим',badgeExpert:'Режим Експерт',
+  hdrLabel:'Офіційний Державний Реєстр',hdrTitle:'Шаблон Нової Держави',hdrSub:'Повна конституційно-державна документація',
+  emblem:'Герб',
+  cname:'Назва країни',uname:'Неофіційна назва',motto:'Девіз держави',
+  indep:'Дата незалежності',gov:'Форма правління',capital:'Столиця',
+  govOpts:['— оберіть —','Республіка','Монархія','Федерація','Теократія','Диктатура','Конфедерація','Анархія','Інше'],
+  secLead:'Керівництво Держави',pres:'Президент / Голова держави',pm:"Прем'єр-міністр",mdef:'Міністр оборони',mfar:'Міністр закордонних справ',term:'Термін президентства',eltype:'Спосіб обрання',govnote:'Коментар щодо влади',
+  phTerm:'напр. 5 років, без обмежень...',phGovnote:'Опис структури влади...',
+  eltypeOpts:['— оберіть —','Прямі вибори','Парламентські вибори','Успадкування','Призначення радою','Революційний уряд'],
+  secPop:'Населення та Демографія',poptot:'Загальна чисельність',popden:'Густота населення',urban:'Урбанізація',lang:'Державна мова',rel:'Офіційна релігія',lit:'Рівень грамотності',eth:'Основні етноси та меншини',
+  phRel:"або «Світська держава»",
+  secEco:'Економіка та Фінанси',ecotype:'Тип економіки',curr:'Національна валюта',gdp:'ВВП (загальний)',gdppc:'ВВП на душу населення',unempl:'Рівень безробіття',infl:'Рівень інфляції',ind:'Головні галузі',trade:'Головні торгові партнери',res:'Природні ресурси',econote:'Економічні особливості та виклики',
+  ecotypeOpts:['— оберіть —','Ринкова','Планова','Змішана','Аграрна','Сировинна','Технологічна','Воєнна'],
+  secMil:'Збройні Сили та Безпека',army:'Чисельність армії',res2:'Резервісти',defbud:'Оборонний бюджет',
+  training:'Рівень підготовки', trainingOpts:['— оберіть —','Низький (призовники без досвіду)','Середній (базова підготовка)','Високий (професійна армія)','Елітний (загартовані в боях)'],
+  armycomp:'Склад збройних сил', armycompOpts:['Регулярні війська','Повстанці','Ополчення','Озброєні цивільні','Поліція / Жандармерія','Спецпризначенці','Найманці / ПВК'],
+  branch:'Рід військ',nuc:'Ядерний статус',milstr:'Боєздатність (1–5)',milcmd:'Якість командування (1–5)',mildoc:'Воєнна доктрина та конфлікти',
+  hintMilstr:'1 = нуль, 5 = наддержава', hintMilcmd:'Ефективність військового штабу', errArmyPop:'⚠ Помилка: Війська + Резерв перевищують загальне населення!',
+  branchOpts:['Сухопутні','ВПС','ВМС','Ракетні','Кібервійська','Космічні','Спецоперації','Нац. гвардія'],
+  nucOpts:["Ядерна держава","Без'ядерна зона","НАТО / альянс","Нейтральна"],
+  secIntel:'Спецслужби та Розвідка',noIntel:'Немає',intelname:'Назва головної спецслужби',inteltype:'Тип',inteldir:'Директор / Керівник',intelbud:'Бюджет спецслужб',intelnotes:'Повноваження та операції',
+  secGeo:'Географія та Території',area:'Загальна площа',coast:'Берегова лінія',clim:'Клімат',neigh:'Сусідні держави',reg:'Регіони / Провінції',disp:'Спірні або окуповані території',
+  secHist:'Історія Створення',indepfull:'Дата незалежності',indepfrom:'Від кого отримано незалежність',indepmet:'Спосіб здобуття незалежності',wardur:'Тривалість громадянської/визвольної війни',histbg:'Передумови виникнення держави',tline:'Хронологія ключових подій',found:'Засновники держави',
+  phWardur:'напр. 1991–1995 (4 роки)',
+  indepmetOpts:['— оберіть —','Мирний (референдум)','Революція','Громадянська війна','Зовнішня агресія / окупація','Розпад держави-попередника',"Об'єднання","Відокремлення (сецесія)"],
+  secFor:'Зовнішня Політика',orgs:'Членство в організаціях',recog:'Міжнародне визнання',allies:'Країни-союзники',enem:'Країни-вороги / суперники',forcourse:'Зовнішньополітичний курс',
+  orgOpts:['ООН','НАТО','ЄС','СНД','БРІКС','АСЕАН','Африканський союз','МВФ','СОТ'],
+  recogOpts:['Широко визнана','Часткове визнання','Невизнана держава','Під санкціями','Міжнародна ізоляція'],
+  secParties:'Партії та Фракції',
+  hintParties:'Офіційна популярність — публічна підтримка. Неофіційна — підпільна, заборонена чи повстанська активність (видима лише в режимі Експерт).',
+  addParty:'+ Додати партію / фракцію',
+  pNamePh:"Назва партії / фракції...",pIdeolLbl:'Ідеологія',pIdeolPh:'напр. консерватизм, марксизм...',pLeadLbl:'Лідер',pLeadPh:"ім'я лідера...",pTypeLbl:'Тип',
+  pTypeOpts:['— тип —','Офіційна партія','Підпільна організація','Збройна фракція','Релігійний рух','Регіональний рух','Іноземний агент'],
+  pOffPop:'Офіційна популярність',pUnoffPop:'Неофіційна (підпільна) активність',
+  pBanned:'ЗАБОРОНЕНА',pDel:'✕',
+  pBanNote:'Заборонена офіційно, але може мати підпільну популярність та організовувати повстання.',
+  pNotesLbl:'Нотатки',pNotesPh:'Коротко про партію, цілі, методи...',
+  summaryFn:(n,b,o,u)=>`Партій: ${n} | Заборонено: ${b} | Офіційна підтримка: ~${o}% | Неофіційна: ~${u}%`,
+  secSoc:'Суспільство та Культура',press:'Індекс свободи преси',corr:'Рівень корупції',rights:'Права людини',life:'Тривалість життя',health:"Охорона здоров'я",edu:'Освіта',ecology:'Екологія та Довкілля',cult:'Культурні особливості та традиції',infra:'Інфраструктура',
+  hintCorr:'1 = чиста, 5 = надкорумпована',hintRights:'1 = порушення, 5 = взірець',
+  phLife:'напр. 72 роки',
+  healthOpts:['— оберіть —','Державна (безкоштовна)','Страхова','Приватна','Змішана','Критичний стан'],
+  eduOpts:['— оберіть —','Безкоштовна держ.','Платна приватна','Релігійна','Змішана','Слаборозвинена'],
+  secTech:'Технології Держави',techera:'Епоха технологій',techeraOpts:['— оберіть —','Середньовіччя','Друга світова війна','Рання Холодна війна','Середина Холодної війни','Пізня Холодна війна','Перехідна епоха','Сучасність','Майбутнє'],
+  techdesc:'Опис технологічного розвитку',techmil:'Військові технології (детально)',techcivil:'Космічна / Цифрова програма',
+  secMisc:'Додаткові Відомості',anthem:'Національний гімн (назва)',sym:'Національні символи',famous:'Відомі особистості',facts:'Цікаві факти / Рекорди',chal:'Внутрішні проблеми та виклики',prosp:'Перспективи та плани розвитку',
+  quickNav:'📍 Навігація',
+  sigAuth:'Підпис укладача',sigDate:'Дата складання',
+  btnImport:'📂 Завантажити',btnPrint:'🖨 Друк',btnTxt:'📄 Текст .txt',btnDocx:'📝 Експорт .docx',btnClear:'↺ Очистити',
+  txtTitle:'ШАБЛОН НОВОЇ ДЕРЖАВИ — ДЕРЖАВНИЙ РЕЄСТР',
+  docxTitle:'ШАБЛОН НОВОЇ ДЕРЖАВИ',docxSub:'Офіційний державний реєстр',
+  genOn:'Сформовано:',
+  stTxt:'✓ Текстовий файл завантажено',stDocx:'✓ Документ Word завантажено',stImport:'✓ Дані успішно імпортовані',
+  stErr:'⚠ Помилка: ',stNoLib:'⚠ Бібліотека не завантажена.',stBuild:'⏳ Формування...',
+  confirmClear:'Очистити всі поля?',locale:'uk-UA'
+},
+en:{
+  modeLabel:'Mode:',modeSimple:'Simple',modeExpert:'Expert',
+  badgeSimple:'Simple Mode',badgeExpert:'Expert Mode',
+  hdrLabel:'Official State Register',hdrTitle:'New Country Template',hdrSub:'Complete constitutional and state documentation',
+  emblem:'Coat of Arms',
+  cname:'Country name',uname:'Unofficial name',motto:'State motto',
+  indep:'Date of independence',gov:'Form of government',capital:'Capital',
+  govOpts:['— select —','Republic','Monarchy','Federation','Theocracy','Dictatorship','Confederation','Anarchy','Other'],
+  secLead:'State Leadership',pres:'President / Head of State',pm:'Prime Minister / Chancellor',mdef:'Minister of Defence',mfar:'Minister of Foreign Affairs',term:'Presidential term',eltype:'Election method',govnote:'Notes on governance',
+  phTerm:'e.g. 5 years, unlimited...',phGovnote:'Description of power structure...',
+  eltypeOpts:['— select —','Direct elections','Parliamentary elections','Hereditary','Council appointment','Revolutionary government'],
+  secPop:'Population & Demographics',poptot:'Total population',popden:'Population density',urban:'Urbanisation',lang:'Official language',rel:'Official religion',lit:'Literacy rate',eth:'Main ethnicities & minorities',
+  phRel:'or "Secular state"',
+  secEco:'Economy & Finance',ecotype:'Economy type',curr:'National currency',gdp:'GDP (total)',gdppc:'GDP per capita',unempl:'Unemployment rate',infl:'Inflation rate',ind:'Key industries',trade:'Main trade partners',res:'Natural resources',econote:'Economic notes & challenges',
+  ecotypeOpts:['— select —','Market','Planned','Mixed','Agricultural','Resource-based','Technological','War economy'],
+  secMil:'Armed Forces & Security',army:'Army size',res2:'Reservists',defbud:'Defence budget',
+  training:'Training level', trainingOpts:['— select —','Low (inexperienced conscripts)','Medium (basic training)','High (professional army)','Elite (battle-hardened)'],
+  armycomp:'Army Composition', armycompOpts:['Regular Forces','Rebels','Militias','Armed Civilians','Police / Gendarmerie','Special Forces','Mercenaries / PMCs'],
+  branch:'Military branches',nuc:'Nuclear status',milstr:'Combat capability (1–5)',milcmd:'Military Command Capability (1–5)',mildoc:'Military doctrine & conflicts',
+  hintMilstr:'1 = none, 5 = superpower', hintMilcmd:'Efficiency of military headquarters', errArmyPop:'⚠ Error: Troops + Reserves exceed total population!',
+  branchOpts:['Army','Air Force','Navy','Missile Forces','Cyber Forces','Space Forces','Special Ops','National Guard'],
+  nucOpts:['Nuclear state','Nuclear-free zone','NATO / alliance','Neutral'],
+  secIntel:'Intelligence Services & Agencies',noIntel:'None',intelname:'Main Agency Name',inteltype:'Type (Foreign, Domestic, etc.)',inteldir:'Director / Head',intelbud:'Intelligence Budget',intelnotes:'Powers & Operations',
+  secGeo:'Geography & Territories',area:'Total area',coast:'Coastline',clim:'Climate',neigh:'Neighbouring states',reg:'Regions / Provinces',disp:'Disputed or occupied territories',
+  secHist:'Founding History',indepfull:'Date of independence',indepfrom:'Independence from whom',indepmet:'Method of gaining independence',wardur:'Duration of civil/liberation war',histbg:'Background & causes of statehood',tline:'Timeline of key events',found:'Founding fathers',
+  phWardur:'e.g. 1991–1995 (4 years)',
+  indepmetOpts:['— select —','Peaceful (referendum)','Revolution','Civil war','Foreign aggression / occupation','Dissolution of predecessor state','Unification','Secession'],
+  secFor:'Foreign Policy',orgs:'Membership in organisations',recog:'International recognition',allies:'Ally countries',enem:'Enemy / rival countries',forcourse:'Foreign policy direction',
+  orgOpts:['UN','NATO','EU','CIS','BRICS','ASEAN','African Union','IMF','WTO'],
+  recogOpts:['Widely recognised','Partial recognition','Unrecognised state','Under sanctions','International isolation'],
+  secParties:'Parties & Factions',
+  hintParties:'Official popularity = public support. Unofficial = underground, banned, or insurgent activity (Expert mode only).',
+  addParty:'+ Add party / faction',
+  pNamePh:'Party / faction name...',pIdeolLbl:'Ideology',pIdeolPh:'e.g. conservatism, Marxism...',pLeadLbl:'Leader',pLeadPh:'leader name...',pTypeLbl:'Type',
+  pTypeOpts:['— type —','Official party','Underground organisation','Armed faction','Religious movement','Regional movement','Foreign agent'],
+  pOffPop:'Official popularity',pUnoffPop:'Unofficial (underground) activity',
+  pBanned:'BANNED',pDel:'✕',
+  pBanNote:'Officially banned but may have underground popularity and organise uprisings.',
+  pNotesLbl:'Notes',pNotesPh:'Brief: goals, methods...',
+  summaryFn:(n,b,o,u)=>`Parties: ${n} | Banned: ${b} | Official support: ~${o}% | Unofficial: ~${u}%`,
+  secSoc:'Society & Culture',press:'Press freedom index',corr:'Corruption level',rights:'Human rights',life:'Life expectancy',health:'Healthcare',edu:'Education',ecology:'Ecology & Environment',cult:'Cultural features & traditions',infra:'Infrastructure',
+  hintCorr:'1 = clean, 5 = highly corrupt',hintRights:'1 = violations, 5 = exemplary',
+  phLife:'e.g. 72 years',
+  healthOpts:['— select —','State (free)','Insurance-based','Private','Mixed','Critical condition'],
+  eduOpts:['— select —','Free public','Paid private','Religious','Mixed','Underdeveloped'],
+  secTech:'State Technologies',techera:'Technological Era',techeraOpts:['— select —','Middle Ages','World War II','Early Cold War','Mid Cold War','Late Cold War','Transitional Age','Modern','Future'],
+  techdesc:'Description of technological progress',techmil:'Military Technologies (Detailed)',techcivil:'Space / Digital Program',
+  secMisc:'Additional Information',anthem:'National anthem (title)',sym:'National symbols',famous:'Famous people',facts:'Fun facts / Records',chal:'Internal problems & challenges',prosp:'Development prospects & plans',
+  quickNav:'📍 Quick Nav',
+  sigAuth:'Compiler signature',sigDate:'Date compiled',
+  btnImport:'📂 Import file',btnPrint:'🖨 Print',btnTxt:'📄 Text .txt',btnDocx:'📝 Export .docx',btnClear:'↺ Clear',
+  txtTitle:'NEW COUNTRY TEMPLATE — STATE REGISTER',
+  docxTitle:'NEW COUNTRY TEMPLATE',docxSub:'Official State Register',
+  genOn:'Generated:',
+  stTxt:'✓ Text file downloaded',stDocx:'✓ Word document downloaded',stImport:'✓ Data imported successfully',
+  stErr:'⚠ Error: ',stNoLib:'⚠ Library not loaded.',stBuild:'⏳ Building...',
+  confirmClear:'Clear all fields?',locale:'en-GB'
+}};
+
+/* ═══ STATE ═══ */
+let lang='uk', mode='simple', partyCounter=0;
+const t=()=>T[lang];
+
+/* ═══ SELECTS & RADIOS ═══ */
+function fillSelect(id,opts,savedVal){
+  const sel=document.getElementById(id); if(!sel)return;
+  const prev=savedVal!==undefined?savedVal:sel.value;
+  sel.innerHTML='';
+  opts.forEach((o,i)=>{const el=document.createElement('option');el.value=i===0?'':o;el.textContent=o;sel.appendChild(el);});
+  sel.value=prev;
+}
+function buildCheckboxes(id,opts){
+  const wrap=document.getElementById(id); if(!wrap)return;
+  const checked=[...wrap.querySelectorAll('input[type=checkbox]')].map((c,i)=>({i,v:c.checked}));
+  wrap.innerHTML='';
+  opts.forEach((lbl,i)=>{
+    const l=document.createElement('label');l.className='checkbox-item';
+    const cb=document.createElement('input');cb.type='checkbox';
+    const prev=checked.find(c=>c.i===i);if(prev&&prev.v)cb.checked=true;
+    l.appendChild(cb);l.append(' '+lbl);wrap.appendChild(l);
+  });
+}
+function buildRadios(id, name, opts){
+  const wrap=document.getElementById(id); if(!wrap)return;
+  const checked=wrap.querySelector('input[type=radio]:checked')?.value;
+  wrap.innerHTML='';
+  opts.forEach((lbl,i)=>{
+    const l=document.createElement('label');l.className='checkbox-item';
+    const rb=document.createElement('input');rb.type='radio'; rb.name=name; rb.value=lbl;
+    if(checked===lbl || (!checked && i===0)) rb.checked=true;
+    l.appendChild(rb);l.append(' '+lbl);wrap.appendChild(l);
+  });
+}
+function applyRecogLogic() {
+  const wrap = document.getElementById('chk-recog');
+  if(!wrap) return;
+  const cbs = wrap.querySelectorAll('input[type=checkbox]');
+  if(cbs.length >= 3) {
+      [0, 1, 2].forEach(i => {
+          cbs[i].addEventListener('change', function() {
+              if(this.checked) { [0, 1, 2].forEach(j => { if(j !== i) cbs[j].checked = false; }); }
+          });
+      });
+  }
+}
+function toggleIntel() {
+  const chk = document.getElementById('chk-nointel').checked;
+  const grid = document.getElementById('intel-grid');
+  if(chk) { grid.style.opacity = '0.3'; grid.style.pointerEvents = 'none'; }
+  else { grid.style.opacity = '1'; grid.style.pointerEvents = 'auto'; }
+}
+
+/* ═══ NAVIGATION & NUMBERS ═══ */
+function updateSectionNumbers() {
+  const roman = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII'];
+  let count = 0;
+  document.querySelectorAll('.section').forEach((sec) => {
+    if(mode==='simple' && sec.classList.contains('expert-only')) {
+      sec.style.display = 'none'; return;
+    }
+    sec.style.display = 'block';
+    const numEl = sec.querySelector('.section-num');
+    if (numEl) numEl.textContent = roman[count] + '.';
+    count++;
+  });
+}
+function populateNav() {
+  const tv=t(); const nav = document.getElementById('quick-nav'); if(!nav) return;
+  nav.innerHTML = `<option value="">${tv.quickNav}</option>`;
+  document.querySelectorAll('.section').forEach((sec) => {
+    if(mode==='simple' && sec.classList.contains('expert-only')) return;
+    const title = sec.querySelector('.section-title')?.textContent || '';
+    const num = sec.querySelector('.section-num')?.textContent || '';
+    if(title) {
+        const opt = document.createElement('option');
+        opt.value = sec.id; opt.textContent = `${num} ${title}`;
+        nav.appendChild(opt);
+    }
+  });
+}
+
+/* ═══ APPLY LANG ═══ */
+function applyLang(){
+  const tv=t();
+  document.documentElement.lang=lang;
+  // top bar
+  document.getElementById('tbl-mode').textContent=tv.modeLabel;
+  document.getElementById('btn-simple').textContent=tv.modeSimple;
+  document.getElementById('btn-expert').textContent=tv.modeExpert;
+  // header
+  document.getElementById('hdr-label').textContent=tv.hdrLabel;
+  document.getElementById('hdr-title').textContent=tv.hdrTitle;
+  document.getElementById('hdr-sub').textContent=tv.hdrSub;
+  const badge=document.getElementById('mode-badge');
+  badge.textContent=mode==='simple'?tv.badgeSimple:tv.badgeExpert;
+  badge.className='mode-badge'+(mode==='expert'?' expert':'');
+  // emblem zone
+  document.getElementById('lbl-emblem').textContent=tv.emblem;
+  document.getElementById('lbl-cname').textContent=tv.cname;
+  document.getElementById('lbl-uname').textContent=tv.uname;
+  document.getElementById('lbl-motto').textContent=tv.motto;
+  document.getElementById('lbl-indep').textContent=tv.indep;
+  document.getElementById('lbl-gov').textContent=tv.gov;
+  document.getElementById('lbl-capital').textContent=tv.capital;
+  document.getElementById('inp-capital').placeholder=tv.capital+'...';
+  fillSelect('sel-gov',tv.govOpts);
+  // sections
+  const ids={
+    'sec-lead':'secLead','sec-pop':'secPop','sec-eco':'secEco','sec-mil':'secMil',
+    'sec-intel':'secIntel', 'lbl-intelname':'intelname', 'lbl-inteltype':'inteltype', 'lbl-inteldir':'inteldir', 'lbl-intelbud':'intelbud', 'lbl-intelnotes':'intelnotes', 'lbl-nointel':'noIntel',
+    'sec-geo':'secGeo','sec-hist':'secHist','sec-for':'secFor','sec-parties':'secParties',
+    'sec-soc':'secSoc', 'sec-tech':'secTech', 'sec-misc':'secMisc',
+    'lbl-pres':'pres','lbl-pm':'pm','lbl-mdef':'mdef','lbl-mfar':'mfar','lbl-term':'term',
+    'lbl-eltype':'eltype','lbl-govnote':'govnote',
+    'lbl-poptot':'poptot','lbl-popden':'popden','lbl-urban':'urban','lbl-lang':'lang',
+    'lbl-rel':'rel','lbl-lit':'lit','lbl-eth':'eth',
+    'lbl-ecotype':'ecotype','lbl-curr':'curr','lbl-gdp':'gdp','lbl-gdppc':'gdppc',
+    'lbl-unempl':'unempl','lbl-infl':'infl','lbl-ind':'ind','lbl-trade':'trade',
+    'lbl-res':'res','lbl-econote':'econote',
+    'lbl-army':'army','lbl-res2':'res2','lbl-defbud':'defbud','lbl-branch':'branch', 'lbl-training':'training', 'lbl-armycomp':'armycomp',
+    'lbl-nuc':'nuc','lbl-milstr':'milstr','lbl-milcmd':'milcmd','lbl-mildoc':'mildoc',
+    'lbl-area':'area','lbl-coast':'coast','lbl-clim':'clim','lbl-neigh':'neigh',
+    'lbl-reg':'reg','lbl-disp':'disp',
+    'lbl-indepfull':'indepfull','lbl-indepfrom':'indepfrom','lbl-indepmet':'indepmet',
+    'lbl-wardur':'wardur','lbl-histbg':'histbg','lbl-tline':'tline','lbl-found':'found',
+    'lbl-orgs':'orgs','lbl-recog':'recog','lbl-allies':'allies','lbl-enem':'enem',
+    'lbl-forcourse':'forcourse',
+    'lbl-press':'press','lbl-corr':'corr','lbl-rights':'rights','lbl-life':'life',
+    'lbl-health':'health','lbl-edu':'edu','lbl-ecology':'ecology','lbl-cult':'cult','lbl-infra':'infra',
+    'lbl-techera':'techera','lbl-techdesc':'techdesc','lbl-techmil':'techmil','lbl-techcivil':'techcivil',
+    'lbl-anthem':'anthem','lbl-sym':'sym','lbl-famous':'famous','lbl-facts':'facts',
+    'lbl-chal':'chal','lbl-prosp':'prosp',
+    'hint-milstr':'hintMilstr','hint-milcmd':'hintMilcmd','hint-corr':'hintCorr','hint-rights':'hintRights',
+    'hint-parties':'hintParties',
+    'sig-auth':'sigAuth','sig-date':'sigDate',
+    'btn-print':'btnPrint','btn-txt':'btnTxt','btn-docx':'btnDocx','btn-clear':'btnClear', 'btn-import':'btnImport',
+    'btn-addparty':'addParty'
+  };
+  Object.entries(ids).forEach(([elId,key])=>{const el=document.getElementById(elId);if(el&&tv[key])el.textContent=tv[key];});
+  // placeholders
+  const ph={'inp-term':'phTerm','ta-govnote':'phGovnote','inp-wardur':'phWardur','inp-life':'phLife','inp-cname':'cname'};
+  Object.entries(ph).forEach(([elId,key])=>{const el=document.getElementById(elId);if(el&&tv[key])el.placeholder=tv[key]+(key==='cname'?'...':'');});
+  document.getElementById('ph-rel').placeholder=tv.phRel;
+  // selects & checkboxes/radios
+  fillSelect('sel-eltype',tv.eltypeOpts);fillSelect('sel-ecotype',tv.ecotypeOpts);
+  fillSelect('sel-indepmet',tv.indepmetOpts);fillSelect('sel-health',tv.healthOpts);
+  fillSelect('sel-edu',tv.eduOpts); fillSelect('sel-training',tv.trainingOpts); fillSelect('sel-techera',tv.techeraOpts);
+  buildCheckboxes('chk-branches',tv.branchOpts);
+  buildCheckboxes('chk-armycomp',tv.armycompOpts);
+  buildRadios('chk-nuclear', 'nuc_status', tv.nucOpts);
+  buildCheckboxes('chk-orgs',tv.orgOpts);
+  buildCheckboxes('chk-recog',tv.recogOpts);
+  applyRecogLogic();
+  // validation
+  validateArmy();
+  // numbers & UI
+  updateSectionNumbers();
+  populateNav();
+  rerenderParties();
+  updateSummary();
+}
+
+/* ═══ VALIDATION ═══ */
+function validateArmy() {
+  let pop = parseInt(document.getElementById('inp-pop').value.replace(/[^\d]/g, '')) || 0;
+  let army = parseInt(document.getElementById('inp-army').value.replace(/[^\d]/g, '')) || 0;
+  let res = parseInt(document.getElementById('inp-res2').value.replace(/[^\d]/g, '')) || 0;
+  const errEl = document.getElementById('err-army');
+  if(pop > 0 && (army + res) > pop) {
+      errEl.textContent = t().errArmyPop;
+      errEl.style.display = 'block';
+  } else {
+      errEl.style.display = 'none';
+  }
+}
+
+/* ═══ MODE ═══ */
+function setMode(m){
+  mode=m;
+  document.body.className='mode-'+m;
+  document.getElementById('btn-simple').classList.toggle('active',m==='simple');
+  document.getElementById('btn-expert').classList.toggle('active',m==='expert');
+  applyLang();
+}
+function setLang(l){
+  lang=l;
+  document.getElementById('btn-uk').classList.toggle('active',l==='uk');
+  document.getElementById('btn-en').classList.toggle('active',l==='en');
+  applyLang();
+}
+
+/* ═══ PARTIES ═══ */
+function addParty(){
+  const tv=t();
+  partyCounter++;
+  const id='p'+partyCounter;
+  const card=document.createElement('div');
+  card.className='party-card';card.id=id;
+  card.innerHTML=`
+<div class="party-header">
+  <input class="party-name-input" type="text" placeholder="${tv.pNamePh}" oninput="updateSummary()">
+  <div class="party-banned-wrap">
+    <input type="checkbox" id="${id}-ban" onchange="toggleBan('${id}')">
+    <label for="${id}-ban" class="ban-lbl">${tv.pBanned}</label>
+  </div>
+  <select class="party-type-sel"></select>
+  <button class="party-del-btn" onclick="deleteParty('${id}')">${tv.pDel}</button>
+</div>
+<div class="party-body">
+  <div class="field">
+    <label class="field-label p-ideol-lbl">${tv.pIdeolLbl}</label>
+    <input class="field-input" type="text" placeholder="${tv.pIdeolPh}">
+  </div>
+  <div class="field">
+    <label class="field-label p-lead-lbl">${tv.pLeadLbl}</label>
+    <input class="field-input" type="text" placeholder="${tv.pLeadPh}">
+  </div>
+  <div class="pop-wrap">
+    <div class="pop-label-row">
+      <span class="pop-key p-offpop-lbl">${tv.pOffPop}</span>
+      <span class="pop-val" id="${id}-ov">0%</span>
+    </div>
+    <div class="pop-track"><div class="pop-fill" id="${id}-of" style="width:0%"></div></div>
+    <input type="range" min="0" max="100" value="0" class="pop-slider" id="${id}-os" oninput="popMove('${id}','o')" onchange="updateSummary()">
+  </div>
+  <div class="pop-wrap expert-only">
+    <div class="pop-label-row">
+      <span class="pop-key p-unoffpop-lbl">${tv.pUnoffPop}</span>
+      <span class="pop-val" id="${id}-uv">0%</span>
+    </div>
+    <div class="pop-track"><div class="pop-fill unoff" id="${id}-uf" style="width:0%"></div></div>
+    <input type="range" min="0" max="100" value="0" class="pop-slider unoff" id="${id}-us" oninput="popMove('${id}','u')" onchange="updateSummary()">
+    <div class="ban-note p-ban-note" style="display:none">${tv.pBanNote}</div>
+  </div>
+  <div class="field full expert-only">
+    <label class="field-label p-notes-lbl">${tv.pNotesLbl}</label>
+    <textarea class="field-input tall" placeholder="${tv.pNotesPh}"></textarea>
+  </div>
+</div>`;
+  const sel=card.querySelector('.party-type-sel');
+  tv.pTypeOpts.forEach((o,i)=>{const op=document.createElement('option');op.value=i===0?'':o;op.textContent=o;sel.appendChild(op);});
+  document.getElementById('parties-list').appendChild(card);
+  if(mode==='simple') card.querySelectorAll('.expert-only').forEach(e=>e.style.setProperty('display','none','important'));
+  updateSummary();
+}
+
+function toggleBan(id){
+  const card=document.getElementById(id);
+  const banned=card.querySelector(`#${id}-ban`).checked;
+  card.classList.toggle('banned',banned);
+  const note=card.querySelector('.p-ban-note');
+  if(note)note.style.display=banned?'block':'none';
+  updateSummary();
+}
+
+function popMove(id,type){
+  const slider=document.getElementById(`${id}-${type}s`);
+  const fill=document.getElementById(`${id}-${type}f`);
+  const val=document.getElementById(`${id}-${type}v`);
+  if(!slider)return;
+  fill.style.width=slider.value+'%';
+  val.textContent=slider.value+'%';
+}
+
+function deleteParty(id){
+  const card=document.getElementById(id);
+  if(!card)return;
+  card.style.opacity='0';card.style.transform='scale(.97)';
+  setTimeout(()=>{card.remove();updateSummary();},200);
+}
+
+function updateSummary(){
+  const tv=t();
+  const cards=document.querySelectorAll('.party-card');
+  let total=cards.length,banned=0,off=0,unoff=0;
+  cards.forEach(card=>{
+    const id=card.id;
+    if(card.querySelector(`#${id}-ban`)?.checked)banned++;
+    off+=parseInt(document.getElementById(`${id}-os`)?.value||0);
+    unoff+=parseInt(document.getElementById(`${id}-us`)?.value||0);
+  });
+  const el=document.getElementById('parties-summary');
+  if(el){el.style.display=total>0?'block':'none';if(total>0)el.textContent=tv.summaryFn(total,banned,off,unoff);}
+}
+
+function rerenderParties(){
+  const tv=t();
+  document.querySelectorAll('.party-card').forEach(card=>{
+    const id=card.id;
+    const ni=card.querySelector('.party-name-input');if(ni)ni.placeholder=tv.pNamePh;
+    const il=card.querySelector('.p-ideol-lbl');if(il)il.textContent=tv.pIdeolLbl;
+    const ii=card.querySelectorAll('.field-input[type=text]')[0];if(ii)ii.placeholder=tv.pIdeolPh;
+    const ll=card.querySelector('.p-lead-lbl');if(ll)ll.textContent=tv.pLeadLbl;
+    const li=card.querySelectorAll('.field-input[type=text]')[1];if(li)li.placeholder=tv.pLeadPh;
+    const ol=card.querySelector('.p-offpop-lbl');if(ol)ol.textContent=tv.pOffPop;
+    const ul=card.querySelector('.p-unoffpop-lbl');if(ul)ul.textContent=tv.pUnoffPop;
+    const bn=card.querySelector('.p-ban-note');if(bn)bn.textContent=tv.pBanNote;
+    const nl=card.querySelector('.p-notes-lbl');if(nl)nl.textContent=tv.pNotesLbl;
+    const ta=card.querySelector('textarea');if(ta)ta.placeholder=tv.pNotesPh;
+    const bl=card.querySelector(`label[for="${id}-ban"]`);if(bl)bl.textContent=tv.pBanned;
+    const db=card.querySelector('.party-del-btn');if(db)db.textContent=tv.pDel;
+    const sel=card.querySelector('.party-type-sel');
+    if(sel){const sv=sel.value;sel.innerHTML='';tv.pTypeOpts.forEach((o,i)=>{const op=document.createElement('option');op.value=i===0?'':o;op.textContent=o;sel.appendChild(op);});sel.value=sv;}
+    card.querySelectorAll('.expert-only').forEach(e=>{
+      if(mode==='simple') e.style.setProperty('display','none','important');
+      else e.style.removeProperty('display');
+    });
+  });
+}
+
+/* ═══ RATINGS ═══ */
+function setRating(id,val){
+  const el=document.getElementById(id);if(!el)return;
+  el.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('active',i<val));
+}
+
+/* ═══ CLEAR ═══ */
+function clearAll(){
+  if(!confirm(t().confirmClear))return;
+  document.querySelectorAll('input[type="text"],input[type="date"],textarea').forEach(e=>e.value='');
+  document.querySelectorAll('select').forEach(e=>e.selectedIndex=0);
+  document.querySelectorAll('input[type="checkbox"]').forEach(e=>e.checked=false);
+  document.querySelectorAll('input[type="radio"]').forEach((e, i)=>{if(i===0)e.checked=true;else e.checked=false;});
+  document.querySelectorAll('.star').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.party-card').forEach(c=>c.remove());
+  partyCounter=0;updateSummary(); document.getElementById('err-army').style.display='none'; toggleIntel();
+}
+
+/* ═══ STATUS ═══ */
+function setStatus(msg){
+  const el=document.getElementById('export-status');el.textContent=msg;
+  setTimeout(()=>el.textContent='',3200);
+}
+
+/* ═══ IMPORT TEXT LOGIC ═══ */
+function handleImport(event) {
+    const file = event.target.files[0];
+    if(!file) return;
+    const tv = t();
+    setStatus(tv.stBuild);
+    const reader = new FileReader();
+
+    if(file.name.endsWith('.docx')) {
+        if(typeof mammoth === 'undefined') { setStatus(tv.stNoLib); return; }
+        reader.onload = function(e) {
+            mammoth.extractRawText({arrayBuffer: e.target.result})
+                .then(res => { processImportText(res.value); event.target.value = ''; })
+                .catch(err => { setStatus(tv.stErr + err); });
+        };
+        reader.readAsArrayBuffer(file);
+    } else {
+        reader.onload = function(e) {
+            processImportText(e.target.result);
+            event.target.value = '';
+        };
+        reader.readAsText(file);
+    }
+}
+
+function processImportText(text) {
+    const labelMap = {};
+    document.querySelectorAll('.field, .mini-field').forEach(f => {
+        const lblEl = f.querySelector('.field-label, .mini-field-label');
+        if(!lblEl) return;
+        let lbl = lblEl.textContent.trim().replace(/:$/, '');
+        const inp = f.querySelector('input[type="text"], input[type="date"], textarea, select');
+        const cbs = f.querySelector('.checkbox-grid');
+        const rat = f.querySelector('.rating-field');
+        if(inp) labelMap[lbl] = {type: 'input', el: inp};
+        else if(cbs) labelMap[lbl] = {type: 'check', el: cbs};
+        else if(rat) labelMap[lbl] = {type: 'rating', el: rat};
+    });
+
+    const lines = text.split('\n');
+    let currentLabel = null;
+    let currentValue = [];
+
+    function saveCurrent() {
+        if(!currentLabel || !labelMap[currentLabel]) return;
+        const target = labelMap[currentLabel];
+        const valStr = currentValue.join('\n').trim();
+        if(valStr === '—' || !valStr) return;
+
+        if(target.type === 'input') {
+            if (target.el.tagName === 'SELECT') {
+                Array.from(target.el.options).forEach((opt, i) => {
+                    if(opt.text === valStr) target.el.selectedIndex = i;
+                });
+            } else {
+                target.el.value = valStr;
+            }
+        } else if(target.type === 'check') {
+            const checkedVals = valStr.split(',').map(s=>s.trim());
+            target.el.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                const lbl = cb.parentElement.textContent.trim();
+                cb.checked = checkedVals.includes(lbl);
+            });
+            target.el.querySelectorAll('input[type="radio"]').forEach(rb => {
+                if (checkedVals.includes(rb.value)) rb.checked = true;
+            });
+        } else if(target.type === 'rating') {
+            const starsCount = (valStr.match(/★/g) || []).length;
+            setRating(target.el.id, starsCount);
+        }
+    }
+
+    lines.forEach(line => {
+        let cleanLine = line.trim().replace(/:$/, '');
+        if (labelMap[cleanLine]) {
+            saveCurrent();
+            currentLabel = cleanLine;
+            currentValue = [];
+        } else if (currentLabel) {
+            currentValue.push(line.replace(/^\s+/, ''));
+        }
+    });
+    saveCurrent();
+    
+    validateArmy();
+    setStatus(t().stImport);
+}
+
+/* ═══ COLLECT ═══ */
+function collectData(){
+  const tv=t();const secs=[];
+  const hd=[];
+  [[document.getElementById('inp-cname'),tv.cname],
+   [document.querySelector('.emblem-zone .flag-zone .mini-field:nth-child(2) input'),tv.uname],
+   [document.getElementById('sel-gov'),tv.gov],
+   [document.getElementById('inp-capital'),tv.capital]
+  ].forEach(([el,lbl])=>{if(!el)return;const v=el.tagName==='SELECT'?(el.options[el.selectedIndex]?.text?.trim()||'—'):(el.value.trim()||'—');hd.push({label:lbl,value:v});});
+  secs.push({title:tv.hdrTitle.toUpperCase(),fields:hd});
+
+  document.querySelectorAll('.section').forEach(sec=>{
+    if(mode==='simple'&&sec.classList.contains('expert-only'))return;
+    const title=sec.querySelector('.section-title')?.textContent?.trim()||'';
+    
+    // Check if intel section is disabled
+    if(sec.id === 'section-5' && document.getElementById('chk-nointel').checked) {
+       return; 
+    }
+
+    if(sec.querySelector('#parties-list')){
+      const pf=[];
+      document.querySelectorAll('.party-card').forEach(card=>{
+        const id=card.id;
+        const name=card.querySelector('.party-name-input')?.value||'?';
+        const banned=card.querySelector(`#${id}-ban`)?.checked?(lang==='uk'?'⛔ ЗАБОРОНЕНА':'⛔ BANNED'):'';
+        const offP=document.getElementById(`${id}-os`)?.value||0;
+        const unP=document.getElementById(`${id}-us`)?.value||0;
+        const ideol=card.querySelectorAll('.field-input[type=text]')[0]?.value||'';
+        const lead=card.querySelectorAll('.field-input[type=text]')[1]?.value||'';
+        const tp=card.querySelector('.party-type-sel')?.value||'';
+        const notes=card.querySelector('textarea')?.value||'';
+        let entry=`${name}${banned?' | '+banned:''}`;
+        if(tp)entry+=` | ${tp}`;
+        if(ideol)entry+=` | ${tv.pIdeolLbl}: ${ideol}`;
+        if(lead)entry+=` | ${tv.pLeadLbl}: ${lead}`;
+        entry+=` | ${tv.pOffPop}: ${offP}%`;
+        if(mode==='expert')entry+=` | ${tv.pUnoffPop}: ${unP}%`;
+        if(notes&&mode==='expert')entry+=`\n  → ${notes}`;
+        pf.push({label:name,value:entry});
+      });
+      if(pf.length)secs.push({title,fields:pf});
+      return;
+    }
+    const fields=[];
+    sec.querySelectorAll('.field').forEach(field=>{
+      if(mode==='simple'&&field.classList.contains('expert-only'))return;
+      const lbl=field.querySelector('.field-label')?.textContent?.trim();if(!lbl)return;
+      const inp=field.querySelector('input[type="text"],input[type="date"],textarea');
+      const sel=field.querySelector('select');
+      const cbs=field.querySelectorAll('input[type="checkbox"]');
+      const rads=field.querySelectorAll('input[type="radio"]');
+      const rat=field.querySelector('.rating-field');
+      let val='';
+      if(inp)val=inp.value.trim()||'—';
+      else if(sel)val=sel.options[sel.selectedIndex]?.text?.trim()||'—';
+      else if(cbs.length){const ch=[...cbs].filter(c=>c.checked).map(c=>c.parentElement.textContent.trim());val=ch.length?ch.join(', '):'—';}
+      else if(rads.length){const ch=[...rads].filter(c=>c.checked).map(c=>c.value);val=ch.length?ch[0]:'—';}
+      else if(rat){const a=rat.querySelectorAll('.star.active').length;val=a?'★'.repeat(a)+'☆'.repeat(5-a):'—';}
+      fields.push({label:lbl,value:val});
+    });
+    if(fields.length)secs.push({title,fields});
+  });
+  return secs;
+}
+
+/* ═══ TXT EXPORT ═══ */
+function exportTXT(){
+  const tv=t();const secs=collectData();
+  let out='╔══════════════════════════════════════════════════════╗\n';
+  out+=`║  ${tv.txtTitle.slice(0,52).padEnd(52)}║\n`;
+  out+='╚══════════════════════════════════════════════════════╝\n';
+  secs.forEach(sec=>{
+    out+=`\n━━━ ${sec.title} ━━━\n\n`;
+    sec.fields.forEach(f=>{out+=`  ${f.label}:\n`;f.value.split('\n').forEach(l=>out+=`    ${l}\n`);out+='\n';});
+  });
+  out+=`\n─────────────────────────────────────────────────────\n${tv.genOn} ${new Date().toLocaleDateString(tv.locale)}\n`;
+  const name=(secs[0]?.fields?.[0]?.value||'country').replace(/[^\wа-яА-ЯїіёЁ\s]/g,'').trim().slice(0,30)||'country';
+  downloadBlob(new Blob([out],{type:'text/plain;charset=utf-8'}),`${name}_template.txt`);
+  setStatus(tv.stTxt);
+}
+
+/* ═══ DOCX EXPORT ═══ */
+async function exportDOCX(){
+  const tv=t();
+  if(typeof docx==='undefined'){setStatus(tv.stNoLib);return;}
+  const btn=document.getElementById('btn-docx');
+  btn.textContent=tv.stBuild;btn.disabled=true;
+  try{
+    const{Document,Packer,Paragraph,TextRun,AlignmentType,BorderStyle}=docx;
+    const secs=collectData();const ch=[];
+    ch.push(new Paragraph({alignment:AlignmentType.CENTER,spacing:{after:80},children:[new TextRun({text:tv.docxTitle,bold:true,size:40,font:'Times New Roman'})]}));
+    ch.push(new Paragraph({alignment:AlignmentType.CENTER,spacing:{after:400},children:[new TextRun({text:tv.docxSub,italics:true,size:24,font:'Times New Roman',color:'8B6914'})]}));
+    secs.forEach(sec=>{
+      ch.push(new Paragraph({spacing:{before:320,after:120},border:{bottom:{style:BorderStyle.SINGLE,size:4,color:'B8860B',space:4}},children:[new TextRun({text:sec.title,bold:true,size:28,font:'Times New Roman',color:'8B1A1A'})]}));
+      sec.fields.forEach(f=>{
+        ch.push(new Paragraph({spacing:{before:140,after:40},children:[new TextRun({text:f.label,bold:true,size:20,font:'Times New Roman',color:'8B6914'})]}));
+        f.value.split('\n').forEach(line=>ch.push(new Paragraph({spacing:{before:0,after:40},indent:{left:360},children:[new TextRun({text:line||' ',size:22,font:'Times New Roman',italics:line==='—'})]})));
+      });
+    });
+    ch.push(new Paragraph({spacing:{before:600},children:[]}));
+    ch.push(new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:`${tv.genOn} ${new Date().toLocaleDateString(tv.locale)}`,size:18,font:'Times New Roman',color:'888888'})]}));
+    const doc=new Document({sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:1440,right:1260,bottom:1440,left:1800}}},children:ch}]});
+    const buf=await Packer.toBlob(doc);
+    const name=(secs[0]?.fields?.[0]?.value||'country').replace(/[^\wа-яА-ЯїіёЁ\s]/g,'').trim().slice(0,30)||'country';
+    downloadBlob(buf,`${name}_template.docx`);
+    setStatus(tv.stDocx);
+  }catch(e){console.error(e);setStatus(tv.stErr+e.message);}
+  finally{btn.textContent=tv.btnDocx;btn.disabled=false;}
+}
+
+function downloadBlob(blob,filename){
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download=filename;document.body.appendChild(a);a.click();
+  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},500);
+}
+
+/* ═══ INIT LISENERS ═══ */
+document.getElementById('inp-pop').addEventListener('input', validateArmy);
+document.getElementById('inp-army').addEventListener('input', validateArmy);
+document.getElementById('inp-res2').addEventListener('input', validateArmy);
+
+/* ═══ INIT ═══ */
+applyLang();
+addParty();addParty();
+</script>
+</body>
+</html>
