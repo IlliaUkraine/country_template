@@ -1,8 +1,8 @@
 🇺🇦 Опис (UA)
 
-Офіційний Державний Реєстр: Шаблон Нової Держави — це веб-інструмент для створення детальної документації вигаданої або реальної держави у форматі офіційного реєстру.
+🏛 Офіційний Державний Реєстр: Шаблон Нової Держави — це веб-інструмент для створення детальної документації вигаданої або реальної держави у форматі офіційного реєстру.
 
-Поточна версія: v0.6
+⚙ Поточна версія: v0.6
 
 Проєкт поєднує зручний інтерфейс із стилізованим дизайном під державний документ і дозволяє заповнювати ключові аспекти країни:
 
@@ -28,9 +28,9 @@
 
 🇬🇧 Description (EN)
 
-Official State Register: New Country Template is a web-based tool for creating structured documentation of a fictional or real state in the format of an official register.
+🏛 Official State Register: New Country Template is a web-based tool for creating structured documentation of a fictional or real state in the format of an official register.
 
-Current version: v0.6
+⚙ Current version: v0.6
 
 The project combines a clean interface with a document-style design, allowing users to define key aspects of a country:
 
