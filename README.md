@@ -6,7 +6,7 @@
 
 Country_template - це веб-інструмент для створення детальної документації вигаданої або реальної держави у форматі офіційного реєстру.
 
-⚙ **Поточна версія:** v0.6.2
+⚙ **Поточна версія:** v0.6.3
 
 Проєкт поєднує зручний інтерфейс зі стилізованим дизайном під державний документ і дозволяє заповнювати ключові аспекти країни:
 
@@ -39,7 +39,7 @@ Country_template - це веб-інструмент для створення д
 
 Country_template - this is a web-based tool for creating structured documentation of a fictional or real state in the format of an official register.
 
-⚙ **Current version:** v0.6.2
+⚙ **Current version:** v0.6.3
 
 The project combines a clean interface with a document-style design, allowing users to define key aspects of a country:
 
