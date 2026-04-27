@@ -4,7 +4,7 @@
 
 🏛 **Офіційний Державний Реєстр: Шаблон Нової Держави**
 
-Це веб-інструмент для створення детальної документації вигаданої або реальної держави у форматі офіційного реєстру.
+Country_template - це веб-інструмент для створення детальної документації вигаданої або реальної держави у форматі офіційного реєстру.
 
 ⚙ **Поточна версія:** v0.6.2
 
@@ -21,15 +21,15 @@
 - **Експерт** — для детального опрацювання всіх аспектів
 
 ### Додаткові можливості
-- перемикання мови (UA / EN)
+- доступні мови (UA / EN)
 - експорт у `.txt` та `.docx`
 - друк документа
-- імпорт даних
+- імпорт `.txt`
 
 ### Важливі зауваження щодо функціоналу
 - Експорт у **.docx** працює **некоректно** (не рекомендую використовувати зараз)
 - Друк документа — **в розробці**
-- Імпорт даних — **працює**, але **не повністю виправлений**
+- Імпорт — **працює**, але **не повністю виправлений**
 
 ---
 
@@ -37,7 +37,7 @@
 
 🏛 **Official State Register: New Country Template**
 
-This is a web-based tool for creating structured documentation of a fictional or real state in the format of an official register.
+Country_template - this is a web-based tool for creating structured documentation of a fictional or real state in the format of an official register.
 
 ⚙ **Current version:** v0.6.2
 
@@ -57,7 +57,7 @@ Two operating modes are available:
 - Language switch (UA / EN)
 - Export to `.txt` and `.docx`
 - Document printing
-- Data import
+- Data `.txt`
 
 ### Important notes on functionality
 - **.docx** export is **not working correctly** (not recommended to use at the moment)
